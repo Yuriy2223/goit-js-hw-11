@@ -1,4 +1,4 @@
-const API_KEY = '41830108-cae6afe398dec34048fd09339';
+const API_KEY = process.env.API_KEY;
 
 import iziToast from 'izitoast';
 import SimpleLightbox from 'simplelightbox';
@@ -42,19 +42,12 @@ form.addEventListener('submit', event => {
       }
 
       const images = data.hits.map(image => {
-        const img = document.createElement('img');
-        img.src = image.webformatURL;
-        img.alt = image.tags;
-        img.dataset.large = image.largeImageURL;
-
-        const link = document.createElement('a');
-        link.href = image.largeImageURL;
-        link.appendChild(img);
-
-        return link;
+        return `<a href="${image.largeImageURL}">
+                  <img src="${image.webformatURL}" alt="${image.tags}" data-large="${image.largeImageURL}">
+                </a>`;
       });
 
-      gallery.append(...images);
+      gallery.insertAdjacentHTML('beforeend', images.join(''));
 
       lightbox.refresh();
     })
